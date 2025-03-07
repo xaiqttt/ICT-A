@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICT-A PROFILES</title>
+    <link rel="icon" type="image/png" href="lg.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url('bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box {
+            background-color: white;
+            width: 55%;
+            height: 57%;
+            max-width: 365px;
+            max-height: 500px;
+            border-radius: 15px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .logo-frame img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        .text h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .text p {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .blue-button {
+            background-color: blue;
+            color: white;
+            padding: 14px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .blue-button:hover {
+            background-color: darkblue;
+        }
+
+        /* 📱 Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .box {
+                width: 85vw;
+                height: 45vh;
+                max-width: 365px;
+                padding: 15px;
+            }
+
+            .text h1 {
+                font-size: 22px;
+            }
+
+            .text p {
+                font-size: 12px;
+            }
+
+            .blue-button {
+                padding: 12px 30px;
+                font-size: 12px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div class="logo-frame">
+            <img src="lg.png" alt="Logo">
+        </div>
+        <div class="text">
+            <h1><strong>WELCOME LYCEANS</strong></h1>
+            <p>This website contains the profiles of all ICT-A students.</p>
+        </div>
+        <a href="main.html">
+            <button class="blue-button">
+                CLICK HERE
+            </button>
+        </a>
+    </div>
+</body>
+
+</html>

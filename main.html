@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICT-A PROFILES</title>
+    <link rel="icon" type="image/png" href="lg.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url('bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: top;
+        }
+
+        .box {
+            margin-top: 10%;
+            background: white;
+            border: 2px solid #E0E0E0;
+            width: 100%;
+            height: 80%;
+            max-width: 850px;
+            max-height: 500px;
+            border-radius: 15px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+        }
+
+        .logo img {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: white;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+            padding: 10px 10px 5px;
+            margin-left: 15px;
+            flex-grow: 1;
+            max-width: 400px;
+            position: relative;
+            height: 50px;
+            margin-top: -5.5px;
+        }
+
+        .search-container input {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 5px;
+            flex-grow: 1;
+            font-size: 18px;  
+            6px;
+        }
+
+
+        .filter-icon {
+            font-size: 18px;
+            margin-left: 10px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .filter-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .filter-options {
+            position: absolute;
+            background: white;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 5px;
+            right: 0;
+            width: 100px;
+        }
+
+        .filter-options div {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .filter-options div:hover {
+            background: #f1f1f1;
+        }
+        
+        .profiles-container {
+            margin-top: 80px;
+            margin-bottom: 10%;
+            height: 90%;
+            overflow-y: auto;
+            padding: 10px;
+            border: 2px solid #E0E0E0;
+            border-radius: 25px;
+        }
+
+        .profiles-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .profile-card {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+            width: 130px;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .profile-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-card:focus,
+        .profile-card:active {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .profile-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            display: block;
+            margin: auto;
+        }
+
+        .profile-name {
+            margin-top: 8px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background-image: url('bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #E0E0E0;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            width: 300px;
+            text-align: center;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .popup.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .popup.closing {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.9);
+        }
+
+        .popup img {
+            margin-top: 20px;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid #E0E0E0;
+        }
+
+        .popup .profile-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .popup .profile-details {
+            margin: 5%;
+            font-size: 16px;
+            margin-top: 10px;
+            text-align: left;
+            font-weight: bold;
+            margin-bottom: 20px;   
+            letter-spacing: 1px;
+            line-height: 25px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 18px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        
+        @media (max-width: 768px) {  
+        .box {  
+            width: 85vw;  
+            height: 90vh;  
+            max-height: none;  
+        }  
+
+        .top-bar {  
+            flex-direction: row;  
+            justify-content: space-between;  
+            padding: 10px;  
+            gap: 1px;  
+        }  
+
+        .search-container {  
+            flex-grow: 1;  
+            max-width: 200px;  
+            margin-left: 10px;  
+        }  
+
+        .logo img {  
+            width: 50px;  
+            height: 50px;  
+        }  
+
+        .filter-icon {  
+            position: relative;  
+            left: -11px;  
+            font-size: 30px;  
+            padding: 5px;  
+        }  
+
+        .profiles-container {
+        height: 85%;
+        padding: 8px;
+    }
+
+    .profiles-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .profile-card {
+        width: 135px;
+        height: 160px;
+        padding: 8px;
+    }
+
+    .profile-card img {
+        width: 100px;
+        height: 100px;
+        margin-top: 2px;
+    }
+
+    .profile-name {
+        font-size: 14px;
+    }
+
+    .popup {
+        width: 85%;
+        max-width: 340px;
+        padding: 15px;
+    }
+
+    .popup img {
+        width: 110px;
+        height: 110px;
+    }
+}
+  
+
+        @media (max-width: 375px) {
+        .box {
+        width: 92vw;
+        height: 88vh;
+        max-height: none;
+        padding: 10px;
+    }
+
+    .top-bar {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 8px;
+        gap: 5px;
+    }
+
+    .search-container {
+        flex-grow: 1;
+        max-width: 180px;
+        margin-left: 5px;
+    }
+
+    .logo img {
+        width: 45px;
+        height: 45px;
+    }
+
+    .filter-icon {
+        position: relative;
+        left: -20px;
+        font-size: 25px;
+        padding: 5px;
+    }
+
+    .profiles-container {
+        height: 85%; /* More space for profile display */
+        padding: 8px;
+    }
+
+    .profiles-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .profile-card {
+        width: 135px;
+        height: 160px;
+        padding: 8px;
+    }
+
+    .profile-card img {
+        width: 100px;
+        height: 100px;
+        margin-top: 2px;
+    }
+
+    .profile-name {
+        font-size: 14px;
+    }
+
+    .popup {
+        width: 85%;
+        max-width: 340px;
+        padding: 15px;
+    }
+
+    .popup img {
+        width: 110px;
+        height: 110px;
+    }
+}
+
+
+
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div class="top-bar">
+            <div class="logo">
+                <img src="lg.png" alt="Logo">
+            </div>
+            <div class="search-container">
+                <input type="text" id="search" placeholder="Search...">
+            </div>
+            <div class="filter-container">
+    <span class="filter-icon" onclick="toggleFilter()">⚙️</span>
+    <div id="filterDropdown" class="filter-options" style="display: none;">
+        <div onclick="filterProfiles('All')">All</div>
+        <div onclick="filterProfiles('Male')">Male</div>
+        <div onclick="filterProfiles('Female')">Female</div>
+    </div>
+</div>
+        </div>
+        
+        <div class="profiles-container">
+            <div class="profiles-grid"></div>
+        </div>
+    </div>
+
+    <div class="popup" id="popup">
+        <span class="close-btn" onclick="closePopup()">X</span>
+        <img id="popup-img" src="" alt="Profile">
+        <div class="profile-name" id="popup-name"></div>
+        <div class="profile-details" id="popup-details"></div>
+    </div>
+
+    <script>
+        const profilesGrid = document.querySelector(".profiles-grid");
+const popup = document.getElementById("popup");
+const popupImg = document.getElementById("popup-img");
+const popupName = document.getElementById("popup-name");
+const popupDetails = document.getElementById("popup-details");
+const searchInput = document.getElementById("search");
+const filterDropdown = document.getElementById("filterDropdown");
+
+const profiles = [
+    { name: "Darwin Jack Telen", image: "pics/Darwin.jpeg", sex: "Male", age: 16, address: "Pateros", hobbies: "Kain, Tulog" },
+    { name: "John Cedric Castro", image: "pics/Cedric.jpeg", sex: "Male", age: 17, address: "Makati City", hobbies: "Kain, Tulog" },
+    { name: "Sophia Kylle Batiles", image: "pics/Sophia.jpeg", sex: "Female", age: 16, address: "Taguig City", hobbies: "N/A" },
+    { name: "Alia Fetalvero", image: "pics/Alia.jpeg", sex: "Female", age: 17, address: "Pateros", hobbies: "N/A" },
+    { name: "David Ivan Dulay", image: "pics/David.jpeg", sex: "Male", age: 17, address: "Taguig City", hobbies: "N/A" },
+    { name: "Jerick James Briones", image: "pics/Jerick.jpeg", sex: "Male", age: 16, address: "Taguig City", hobbies: "N/A" },
+    { name: "Ezekiel Andrew Gayta", image: "pics/Ezekiel.jpeg", sex: "Male", age: 16, address: "Taguig City", hobbies: "N/A" },
+    { name: "Margarette Manny Tapiador", image: "pics/Marga.jpeg", sex: "Female", age: 16, address: "Taguig City", hobbies: "N/A" },
+    { name: "Kathlyn Babon", image: "pics/Kathlyn.jpeg", sex: "Female", age: 16, address: "Taguig City", hobbies: "N/A" },
+    { name: "Mico Bon", image: "pics/Mico.jpeg", sex: "Male", age: 17, address: "Taguig City", hobbies: "N/A" },
+    { name: "Francis Nicolas", image: "pics/Francis.jpeg", sex: "Male", age: 17, address: "Taguig City", hobbies: "N/A" },
+    { name: "Fredie Aristosa", image: "pics/Fredie.jpeg", sex: "Male", age: 17, address: "N/A", hobbies: "N/A" },
+    { name: "Rainner Lizardo", image: "pics/Rainner.jpeg", sex: "Male", age: 17, address: "N/A", hobbies: "N/A" },
+    { name: "Zainodin Lamis", image: "pics/Zainodin.jpeg", sex: "Male", age: 17, address: "N/A", hobbies: "N/A" },
+    { name: "Erwin Omabao", image: "pics/Erwin.jpeg", sex: "Male", age: 17, address: "Taguig City", hobbies: "N/A" },
+    { name: "Franz Stephen Bot-ay", image: "pics/Franz.jpeg", sex: "Male", age: 17, address: "Manila", hobbies: "N/A" },
+    { name: "Yuan Kylle Mendoza", image: "pics/Yuan.jpeg", sex: "Male", age: 16, address: "Taguig City", hobbies: "N/A" },
+    { name: "Deinnielle Royo", image: "pics/Deinnielle.jpeg", sex: "Male", age: 16, address: "Taguig City", hobbies: "N/A" },
+    { name: "Adrian Gonzalez", image: "pics/Adrian.jpeg", sex: "Male", age: "N/A", address: "N/A", hobbies: "N/A" },
+    { name: "Aryx Andrei Quia", image: "pics/Aryx.jpeg", sex: "Male", age: 16, address: "N/A", hobbies: "N/A" },
+    { name: "Ace Valencia", image: "pics/Ace.jpeg", sex: "Male", age: 16, address: "N/A", hobbies: "N/A" },
+    { name: "Vincent Hugo", image: "pics/Vincent.jpeg", sex: "Male", age: 17, address: "Taguig City", hobbies: "N/A" },
+    { name: "Gabriel Chua", image: "pics/Gabriel.jpeg", sex: "Male", age: 16, address: "N/A", hobbies: "N/A" },
+    { name: "Jesly Reginaldo Bon", image: "pics/Jesly.jpeg", sex: "Female", age: 16, address: "Taguig City", hobbies: "N/A" },
+    { name: "Athena Jairah Deita", image: "pics/Athena.jpeg", sex: "Female", age: 16, address: "N/A", hobbies: "N/A" },
+    
+];
+
+function displayProfiles(filteredProfiles = profiles) {
+    profilesGrid.innerHTML = "";
+    filteredProfiles.forEach(profile => {
+        let profileCard = document.createElement("div");
+        profileCard.className = "profile-card";
+        profileCard.innerHTML = `<img src="${profile.image}" alt="${profile.name}"><div class="profile-name">${profile.name}</div>`;
+        profileCard.onclick = () => showPopup(profile);
+        profilesGrid.appendChild(profileCard);
+    });
+}
+
+function showPopup(profile) {
+    popupImg.src = profile.image;
+    popupName.innerText = profile.name;
+    popupDetails.innerHTML = `Sex: ${profile.sex}<br>Age: ${profile.age}<br>Address: ${profile.address}<br>Hobbies: ${profile.hobbies}`;
+    popup.style.display = "block";
+    setTimeout(() => popup.classList.add("active"), 10);
+}
+
+function closePopup() {
+    popup.classList.add("closing");
+    setTimeout(() => {
+        popup.classList.remove("active", "closing");
+        popup.style.display = "none";
+    }, 300);
+}
+
+function filterProfiles(gender) {
+    let filteredProfiles = gender === "All" 
+        ? [...profiles] 
+        : profiles.filter(profile => profile.sex === gender);
+
+    displayProfiles(filteredProfiles);
+    filterDropdown.style.display = "none";
+}
+
+function toggleFilter() {
+    filterDropdown.style.display = filterDropdown.style.display === "block" ? "none" : "block";
+}
+
+searchInput.addEventListener("input", () => {
+    const searchText = searchInput.value.toLowerCase();
+    const filteredProfiles = profiles.filter(profile => profile.name.toLowerCase().includes(searchText));
+    displayProfiles(filteredProfiles);
+});
+
+displayProfiles(profiles);
+    </script>
+</body>
+</html>
